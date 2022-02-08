@@ -1,0 +1,81 @@
+version: '3.3'
+
+services:
+  prestashop:
+    image: prestashop/prestashop:1.7
+    environment:
+      - PS_INSTALL_AUTO=${PS_INSTALL_AUTO:-1}
+      - DB_SERVER=${DB_SERVER:-mysql}
+      - DB_USER=${MYSQL_USER}
+      - DB_PASSWD=${MYSQL_PASSWORD}
+      - DB_NAME=${MYSQL_DATABASE}
+      - PS_DOMAIN=${PS_DOMAIN}
+      - PS_HANDLE_DYNAMIC_DOMAIN=${PS_HANDLE_DYNAMIC_DOMAIN:-1}
+      - PS_ENABLE_SSL=${PS_ENABLE_SSL:-1}
+      - PS_FOLDER_INSTALL=${PS_FOLDER_INSTALL:-install-dev}
+      - PS_FOLDER_ADMIN=${PS_FOLDER_ADMIN:-admin-dev}
+      - PS_COUNTRY=${PS_COUNTRY:-es}
+      - PS_LANGUAGE=${PS_LANGUAGE:-es}
+      - ADMIN_MAIL=${ADMIN_MAIL}
+      - ADMIN_PASSWD=${ADMIN_PASSWD}
+    restart: always
+    volumes:
+      - prestashop_data:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - frontend_network
+      - backend_network
+  
+  mysql:
+    image: mysql:8
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    restart: always
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - backend_network
+    security_opt:
+      - seccomp:unconfined
+
+  phpmyadmin:
+    image: phpmyadmin:5
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_HOST=mysql
+    depends_on:
+      - mysql
+    networks:
+      - frontend_network
+      - backend_network
+
+  https-portal:
+    image: steveltn/https-portal:1
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      #DOMAINS: 'localhost -> http://prestashop:80 #local'
+      DOMAINS: 'iaw-bitnamiwp.ddns.net -> http://prestashop:80 #production'
+    volumes:
+      - ssl_certs_data:/var/lib/https-portal
+    depends_on:
+      - prestashop
+    restart: always
+    networks:
+      - frontend_network
+
+volumes:
+  prestashop_data:
+  mysql_data:
+  ssl_certs_data:
+
+networks:
+  frontend_network:
+  backend_network:
