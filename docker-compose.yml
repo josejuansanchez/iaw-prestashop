@@ -10,7 +10,6 @@ services:
       - DB_PASSWD=${MYSQL_PASSWORD}
       - DB_NAME=${MYSQL_DATABASE}
       - PS_DOMAIN=${PS_DOMAIN}
-      - PS_HANDLE_DYNAMIC_DOMAIN=${PS_HANDLE_DYNAMIC_DOMAIN:-1}
       - PS_ENABLE_SSL=${PS_ENABLE_SSL:-1}
       - PS_FOLDER_INSTALL=${PS_FOLDER_INSTALL:-install-dev}
       - PS_FOLDER_ADMIN=${PS_FOLDER_ADMIN:-admin-dev}
@@ -62,7 +61,7 @@ services:
       - 443:443
     environment:
       #DOMAINS: 'localhost -> http://prestashop:80 #local'
-      DOMAINS: 'iaw-bitnamiwp.ddns.net -> http://prestashop:80 #production'
+      DOMAINS: 'iaw-test.ddns.net -> http://prestashop:80 #production'
     volumes:
       - ssl_certs_data:/var/lib/https-portal
     depends_on:
