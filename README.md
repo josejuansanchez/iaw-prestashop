@@ -9,7 +9,14 @@ Las imágenes que se han utilizado en este ejemplo son:
 - [phpmyadmin:5][5]
 - [steveltn/https-portal:1][6]
 
+## Diagrama de redes y servicios
+
+![](images/arquitectura_prestashop.png)
+
+## Referencias
+
 Este repositorio se utiliza en el [módulo de Implantación de Aplicaciones Web][1] del **Ciclo Formativo ASIR** del **IES Celia Viñas (Almería)**.
+
 
 [1]: https://josejuansanchez.org/iaw/
 [2]: https://josejuansanchez.org/iaw/practica-prestashop/index.html
