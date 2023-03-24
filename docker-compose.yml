@@ -61,7 +61,7 @@ services:
       - 443:443
     environment:
       DOMAINS: 'localhost -> http://prestashop:80 #local'
-      #DOMAINS: 'iaw-test.ddns.net -> http://prestashop:80 #production'
+      #DOMAINS: '${PS_DOMAIN} -> http://prestashop:80 #production'
     volumes:
       - ssl_certs_data:/var/lib/https-portal
     depends_on:
